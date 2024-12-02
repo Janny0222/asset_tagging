@@ -1,21 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+body, html {
+  font-family: 'Poppins', sans-serif;
+  font-size: 400;
+}
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  background-color: #3e4744;
+
+}
+.name {
+  text-shadow: 2px 0px white;
+  letter-spacing: .3rem;
+  
+}
+input:focus, textarea:focus, select:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.linear-bg {
+  background: linear-gradient(267.82deg, #07091c00 0.17%, #080a1ad6 99.87%);
+}
+.hoveres {
+  @apply hidden
+}
+.hovered:hover .hoveres{
+  @apply flex-colo
+}
+.flex-colo {
+  @apply flex flex-col justify-center items-center
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.flex-rows {
+  @apply flex flex-row justify-center items-center
+}
+
+.flex-btn {
+  @apply flex justify-between items-center
+}
+
+.transitions {
+  @apply transition duration-300 ease-in
+}
+
+.zIndex {
+  z-index: 1000;
+}
+.sidebar, .sidenav {
+  background: #00a756;
+}
+.summary-cards, .dashbord-summary, .create-button, .bg-table {
+  background-color: #00b65b;
+}
+.custom-font {
+  color: rgb(255, 255, 255)
+}
+.button-bg {
+  background: rgb(166, 187, 141)
+}
+.tooltipText {
+  position: absolute;
+  left: 50%;
+  top: 1;
+  transform: translateX(-62%);
+  color: black;
+  padding: 10px 15px;
+  border-radius: 7px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5 ease;
+}
+
+.tooltipText::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  
+}
+
+.tooltip:hover .tooltipText {
+  top: 0%;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+@keyframes scrollAnimation {
+  0% {
+      transform: translateY(100%);
+  }
+  100% {
+      transform: translateY(-100%);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.animated-text {
+  display: inline-block;
+  overflow: hidden;
+  height: 3em; /* Adjust the height based on your text size */
 }
+
+.scrolling-text {
+  display: block;
+  animation: scrollAnimation 10s linear infinite; /* Adjust duration and timing function as needed */
+}
+
+

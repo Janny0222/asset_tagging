@@ -1,0 +1,19 @@
+@keyframes scrollAnimation {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+.animated-text {
+    display: inline-block;
+    overflow: hidden;
+    height: 3em; /* Adjust the height based on your text size */
+}
+
+.scrolling-text {
+    display: block;
+    animation: scrollAnimation 10s linear infinite; /* Adjust duration and timing function as needed */
+}
