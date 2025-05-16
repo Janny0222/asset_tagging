@@ -21,7 +21,7 @@ const AddCategoryComponent = () => {
   useEffect(() => {
     fetchCategoryData()
   }, [fetchCategoryData])
-  const handleEditButton = (id: number | undefined) => {
+  const handleEditButton = (id: any) => {
     setSelectedId(id)
     setEditModalOpen(true)
   }
@@ -69,7 +69,7 @@ const AddCategoryComponent = () => {
                 <td className={`${Text}`}>{data.name}</td>
                 <td className={` ${Text} `}>
                   <div className='flex gap-2 justify-center items-center'>
-                      <button onClick={() => handleEditButton(data.id)} aria-label="Edit item" className=" bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
+                      <button onClick={() => handleEditButton(data?.id!)} aria-label="Edit item" className=" bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
                               <FaEdit className="text-text" />
                       </button>
                       {/* <button onClick={() => handleDeleteData(data.id)} aria-label="Delete item" className="bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
