@@ -12,7 +12,7 @@ interface TaggingState {
     setSelectedTagging: (table: TaggingProps) => void
     taggingRefresh: () => void
     taggingComputerRefresh: () => void
-    fetchAllTaggingData: (table_id: number, asset_type: number) => void
+    fetchAllTaggingData: (table_id: number, asset_type: any) => void
     fetchSpecificTaggingDatas: (tagging: string) => void
     fetchTaggingSuggestions: (query: string) => void 
     // fetchSpecificTaggingData: (id: string) => void
