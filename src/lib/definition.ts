@@ -430,7 +430,7 @@ export interface TaggingProps {
 }
 
 export interface CategoryProps {
-    id?: number | string;
+    id?: any;
     name?: string;
     is_active?: number;
     createdAt?: string;
