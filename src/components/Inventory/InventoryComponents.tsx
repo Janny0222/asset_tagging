@@ -30,7 +30,7 @@ const InventoryComponents = () => {
     const [modalEditAssetInventory, setModalEditAssetInventory] = useState(false)
     const [modalDeleteAssetInventory, setModalDeleteAssetInventory] = useState(false)
     const { status } = useStatusToggleChange()
-    const { assetInventoryData, fetchAssetInventoryData } = useAssetInventoryStore()
+    const { assetInventoryData, fetchAssetInventoryData, fetchSpecificAssetInventoryData, fetchAllAssetInventoryData } = useAssetInventoryStore()
 
         // Table Header
 const tableHead: TableColumn[] = [
@@ -49,16 +49,33 @@ const tableHead: TableColumn[] = [
   ];
     
     useEffect(() => {
-        if (selectedCompany ) {
-            fetchAssetInventoryData();
-        }
-    }, [selectedCompany, fetchAssetInventoryData, selectedCategory, status])
+        if (selectedCompany) {
+            if(!selectedCategory) {
+                fetchAllAssetInventoryData()
+            } else {
+                fetchAssetInventoryData();
+            }
+        } 
+    }, [selectedCompany, fetchAssetInventoryData, selectedCategory, status, fetchAllAssetInventoryData])
 
     // Search
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value)
         setCurrentPage(1)
     }
+    const filteredAssetInventory = assetInventoryData.filter((data) => data.company_id === selectedCompany?.id!)
+    const filteredData = filteredAssetInventory.filter((data) => {
+        return (
+            data.person_in_charge?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.department?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.invoice_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.asset_info?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.model_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.specs?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            data.cost?.toString().includes(searchQuery.toLowerCase())
+        )
+    })
     const highlightText = (text: string, query: string) => {
         if (!query) return text;
         const parts = text.split(new RegExp(`(${query})`, 'gi'));
@@ -82,11 +99,12 @@ const tableHead: TableColumn[] = [
     }
     
     const {paginated, totalPages, totalFilteredCount} = useMemo(() => {
-        const filteredItems = assetInventoryData.filter((data) => {
+        const filteredItems = filteredData.filter((data) => {
             return (
                 data.person_in_charge?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 data.department?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 data.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.invoice_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 data.asset_info?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 data.model_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 data.specs?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -99,12 +117,13 @@ const tableHead: TableColumn[] = [
             currentPage * itemsPerPage
         )
         return {paginated, totalPages, totalFilteredCount: filteredItems.length}
-    }, [assetInventoryData, searchQuery, currentPage, itemsPerPage])
+    }, [ searchQuery, currentPage, itemsPerPage, filteredData])
     
     // Action and Modal
     const handleGenerateTaggingData = (id: number | undefined) => {
         setSelectedId(id!)
         setModalGenerateTaggingData(true)
+        fetchSpecificAssetInventoryData(id!)
     }
     const handleCreate = () => {
         setModalOpen(true)
@@ -130,7 +149,7 @@ const renderRow = (data: AssetInventoryProps) => {
             <td className={`${Text} `}>{highlightText(data.supplier || '', searchQuery)}</td>
             <td className={`${Text} `}>{data.asset_info?.split(',').map((asset, index) => (index >= 0 && (<div key={index}>{highlightText(asset.trim(), searchQuery)}</div>)))}</td>
             <td className={`${Text} `}>{data.specs?.split(',').map((spec, index) => (index >= 0 && (<div key={index}>{highlightText(spec.trim(), searchQuery)}</div>)))}</td>
-            <td className={`${Text} `}>{highlightText(data?.remarks || '', searchQuery)}</td>
+            <td className={`${Text} text-wrap `}>{highlightText(data?.remarks || '', searchQuery)}</td>
             <td className={`${Text} `}>{status === 'active' ? data.date_deployed || '' : data.date_returned || ''}</td>
             <td className={` ${Text} `}>
                 <div className='flex gap-2 justify-center items-center'>
@@ -155,7 +174,7 @@ const renderRow = (data: AssetInventoryProps) => {
         setModalOpen={setModalGenerateTaggingData}
         id={selectedId}
     />
-    <RemoveAssetDataInventory modalOpen={modalDeleteAssetInventory} setModalOpen={setModalDeleteAssetInventory} />
+    <RemoveAssetDataInventory id={selectedId} modalOpen={modalDeleteAssetInventory} setModalOpen={setModalDeleteAssetInventory} />
     <EditAssetInventoryModal id={selectedId} modalOpen={modalEditAssetInventory} setModalOpen={setModalEditAssetInventory} />
         <CreateAssetInventoryModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
         <div className='bg-gray-200 min-h-full'>

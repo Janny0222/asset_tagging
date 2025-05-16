@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '@/components/Layout'
 import Head from 'next/head';
-import { Select } from '@/components/UserInput';
+import { SelectCategory } from '@/components/UserInput';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { Option } from '@/lib/definition';
 import InventoryComponents from '@/components/Inventory/InventoryComponents';
@@ -44,7 +44,7 @@ const { categoryData, fetchCategoryData, selectedCategory, setSelectedCategory }
                         <label className='text-white mx-auto'>Select Category</label>
                     </div>
                     <div>
-                        <Select selectedValue={selectedCategory?.id || 'Please select'} options={categoryList} onChange={(e) => handleCategoryChange(+e.target.value)} />
+                        <SelectCategory selectedValue={selectedCategory?.id || 'Please select'} options={categoryList} onChange={(e) => handleCategoryChange(+e.target.value)} />
                     </div>
                 </div>
             </div>

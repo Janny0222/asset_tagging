@@ -11,11 +11,13 @@ import domtoimage from 'dom-to-image';
 import { useCategoryStore } from '@/stores/categoryStore'
 import QRGenerator from '@/components/QRCodeGenerator/QRGenerator'
 import Image from 'next/image'
+import { useAssetInventoryStore } from '@/stores/assetInventoryStore'
 
 const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps) => {
     const [error, setError] = useState<string >('')
     const { selectedCompany } = useCompanyStore()
-    const {selectedCategory} = useCategoryStore()
+    const { selectedCategory } = useCategoryStore()
+    const {selectedAssetInventory} = useAssetInventoryStore()
     const { taggingData, selectedTagging, fetchAllTaggingData } = useTaggingStore()
     const [tagging, setTagging] = useState<TaggingProps>({
         tagging: '',
@@ -25,7 +27,7 @@ const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps
         setModalOpen(false)
         setError('')
     }
-    console.log('taggingData:' , taggingData)
+    console.log('taggingData:' , selectedAssetInventory)
     useEffect(() => {
         if(modalOpen && id) {
             fetchAllTaggingData(selectedCompany?.id!, selectedCategory?.id!)
@@ -89,7 +91,7 @@ const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps
                         <div
                             ref={taggingRef}
                             style={{
-                                width: '600px',
+                                width: '610px',
                                 height: '300px',
                                 backgroundColor: '#fff',
                                 display: 'flex',
@@ -108,12 +110,12 @@ const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps
                                         width: '300px',
                                         textAlign: 'center',
                                         borderRight: '2px solid black',
-                                        backgroundColor: '#10402c'
+                                        backgroundColor: `${selectedCompany?.id === 7 || selectedCompany?.id === 5 ? '#14458f' : '#10402c' }`
                                     }}
                                     className='text-center text-white flex justify-center items-center'>   
                                     <div className='flex flex-col gap-2'>
                                             <div className=''>
-                                                <QRGenerator text={selectedCompany?.code?.toUpperCase()+ '-' + selectedCategory?.name?.toUpperCase().slice(0, 3)! + control_no} />
+                                                <QRGenerator text={selectedAssetInventory?.specs!} />
                                             </div>
                                             <span className='text-white'>
                                                 {selectedCompany?.code?.toUpperCase()+ '-' + selectedCategory?.name?.toUpperCase().slice(0, 3)! + control_no}
@@ -126,7 +128,7 @@ const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            width: '170px',
+                                            width: '200px',
                                             height: '200px',
                                             backgroundImage: `url('/uploads/${selectedCompany?.logo_image}')`,
                                             backgroundSize: 'contain',

@@ -103,12 +103,12 @@ const TaggingComponents = () => {
     <ReprintTaggingModal modalOpen={reprintModal} setModalOpen={setReprintModal} name={selectedTagging?.tagging} />
     <div className='bg-gray-200 min-h-full container mx-auto'>
         <div 
-            className='pt-5 min-h-screen bg-gray-200 px-5 '>
-            <div className='bg-navbar text-black p-5 rounded-md'>
+            className='pt-5 min-h-screen  '>
+            <div className='bg-navbar text-black p-5'>
                 <h1 className='text-2xl font-medium text-white'> ASSET TAGGING </h1>
                 {/* <h1 className='uppercase font-semibold'>{selectedCompany?.name}</h1> */}
                 <div className='py-2 mt-5'>
-                    <div className=' grid grid-cols-8 sm:gap-10 gap-'>
+                    <div className=' grid grid-cols-8 sm:gap-10 gap-1'>
                         <form onSubmit={handleSearchSubmit} className='sm:col-span-7 col-span-6 text-sm bg-white border rounded flex gap-2'>
                             <div className='bg-subMain w-12 flex-colo h-12 text-text py-2 rounded'>
                                 <button type="submit"><FaSearch /> </button> 
@@ -116,7 +116,7 @@ const TaggingComponents = () => {
                             <input type='text' onChange={handleInputChange} value={inputValue} placeholder='Search by Control No.'
                             className='font-medium placeholder:text-border w-11/12 text-sm h-12 border-none rounded-md text-black' aria-label='Search Computer' />
                             {dropdownVisible && suggestions?.length > 0 && (
-                              <ul className="absolute bg-white border rounded-md shadow-lg z-10 w-auto mt-12 ml-12">
+                              <ul className="absolute bg-white border overflow-y-scroll h-96 rounded-md shadow-lg z-10 w-auto mt-12 ml-12">
                                 {suggestions.map((suggestion) => (
                                   <li
                                     key={suggestion.id}
@@ -134,47 +134,47 @@ const TaggingComponents = () => {
         
             </div>
             
-            <div className="container w-auto my-2 bg-navbar rounded-md text-white p-5">
+            <div className="container w-auto my-2 bg-navbar text-white p-5">
               <h1> Tagging Details</h1>
               { inputValue === selectedTagging?.tagging ? (
-                <form className="border border-md rounded-md grid gap-2 grid-cols-6 p-5">
-                  <div className="col-span-1 p-1">
+                <form className="border border-md rounded-md grid text-wrap gap-2 grid-cols-6 p-5">
+                  <div className="col-span-3 sm:col-span-2 p-1">
                     <Input label="Control Number" placeholder={selectedTagging?.tagging || ''} disabled bg name="tagging" onChange={() => {}} value={selectedTagging?.tagging || ''} type="text" />
                   </div>
-                  <div className="col-span-3"></div>
-                  <div className="col-span-2 flex justify-center items-center">
+                  <div className="col-span-1  "></div>
+                  <div className="col-span-2 sm:col-span-3 flex justify-center items-center">
                     <span>Status: <em className={`${selectedStatus?.name === 'Active' ? 'text-green-500' : 'text-red-500'}`}>{ selectedStatus?.name}</em></span>
                   </div>
-                  <div className="col-span-2 p-1">
-                    <Input label="Asset Type" value={categoryData.find((data) => data.id === selectedTagging?.id)?.name || ''} bg />
+                  <div className="col-span-3 sm:col-span-2 p-1">
+                    <Input label="Asset Type" disabled value={categoryData?.find((data) => data.id === selectedTagging?.asset_type)?.name || ''} bg />
                   </div>
-                  <div className="col-span-2 p-1">
+                  <div className="col-span-3 sm:col-span-2 p-1">
                     <Input type="text" disabled name="table_id" onChange={() => {}} label="Company" value={companyData.find((data) => data.id === selectedTagging?.table_id)?.name || ''} bg />
                   </div>
-                  <div className={`col-span-2 p-1 `}>
+                  <div className={`col-span-3 sm:col-span-2 p-1 `}>
                     <Input label="Assigned To" disabled onChange={() => {}} value={selectedAssetInventory?.person_in_charge! || ''} bg  />
                   </div>
-                  <div className="col-span-2 p-1">
+                  <div className="col-span-3 sm:col-span-2 p-1">
                     <Input label="Invoice Number" disabled onChange={() => {}} value={selectedAssetInventory?.invoice_number! || ''} bg />
                   </div>
-                  <div className={`col-span-2 p-1 text-white `}>
+                  <div className={`col-span-3 sm:col-span-2 text-white `}>
                     <Input label="Invoice Date" disabled onChange={() => {}} value={selectedAssetInventory?.invoice_date! || ''} bg  />
                   </div>
-                  <div className={`col-span-2 p-1 `}>
+                  <div className={`col-span-3 sm:col-span-2 `}>
                     <Input label="Cost" disabled onChange={() => {}} value={selectedAssetInventory?.cost! || 'Cost not set'} bg  />
                   </div>
                   {showMore && 
                   <>
-                    <div className="col-span-2 p-1">
+                    <div className="col-span-3 sm:col-span-2 p-1">
                       <TextArea label="Asset Information" disabled onChange={() => {}} value={selectedAssetInventory?.asset_info! || ''} rows={2} name="asset_info" />
                     </div>
-                    <div className="col-span-2 p-1">
+                    <div className="col-span-3 sm:col-span-2 p-1">
                       <TextArea label="Specification" disabled onChange={() => {}} value={selectedAssetInventory?.specs! || ''} rows={2} name="specs" />
                     </div>
-                    <div className="col-span-2 p-1">
+                    <div className="col-span-6 sm:col-span-2 p-1">
                       <TextArea label="Remarks" disabled onChange={() => {}} value={selectedAssetInventory?.remarks! || ''} rows={2} name="remarks" />
                     </div>
-                    <div className="col-span-3 flex flex-row gap-2 text-center">
+                    <div className="col-span-6 flex flex-row gap-2 text-center">
                       
                         <form onClick={handleReprint} className="border w-full border-black rounded p-2 bg-green-500 text-black">
                           <button type="submit">Re-print Tagging</button>

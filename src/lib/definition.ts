@@ -246,8 +246,8 @@ export interface ChildrenModalProps {
 }
 
 export interface Option {
-    value: number;
-    title: string;
+    value?: number | string;
+    title?: string;
 }
 
 export interface SelectProps {
@@ -256,7 +256,7 @@ export interface SelectProps {
     name?: string;
     computerType?: boolean;
     selectedValue?: number | string
-    options: Option[];
+    options?: Option[];
     onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
     
 }
@@ -430,7 +430,7 @@ export interface TaggingProps {
 }
 
 export interface CategoryProps {
-    id?: number;
+    id?: number | string;
     name?: string;
     is_active?: number;
     createdAt?: string;

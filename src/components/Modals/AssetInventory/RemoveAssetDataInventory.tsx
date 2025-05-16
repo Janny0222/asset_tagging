@@ -5,12 +5,12 @@ import { CgCheck, CgClose } from 'react-icons/cg'
 import { IoClose } from 'react-icons/io5'
 import { useAssetInventoryStore } from '@/stores/assetInventoryStore'
 
-const RemoveAssetDataInventory = ({modalOpen, setModalOpen} : ChildrenModalProps) => {
+const RemoveAssetDataInventory = ({modalOpen, setModalOpen, id} : ChildrenModalProps) => {
     const { fetchSpecificAssetInventoryData, selectedAssetInventory, removeAsset, assetInventoryRefresh } = useAssetInventoryStore()
 
     useEffect(() => {
-        if(modalOpen) fetchSpecificAssetInventoryData(selectedAssetInventory?.id!)
-    }, [modalOpen, fetchSpecificAssetInventoryData, selectedAssetInventory?.id])
+        if(modalOpen) fetchSpecificAssetInventoryData(id!)
+    }, [modalOpen, fetchSpecificAssetInventoryData, id])
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();

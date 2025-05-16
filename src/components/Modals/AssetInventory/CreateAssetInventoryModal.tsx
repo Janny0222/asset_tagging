@@ -51,7 +51,7 @@ const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProp
           style: 'currency',
           currency: 'PHP',
           minimumFractionDigits: 2,
-        }).format(numberValue).replace('PHP', '₱');
+        }).format(numberValue).replace('PHP', '');
       };
     const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

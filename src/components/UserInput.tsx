@@ -63,8 +63,25 @@ export const Select: React.FC<SelectProps> = ({selectedValue, computerType, opti
     <div className='text-sm w-full'>
       <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
         <select disabled={computerType} value={selectedValue} className="w-full mt-1 px-2 py-2 text-navbar bg-main border border-border rounded" onChange={onChange}>
-            <option value="">Please select</option> 
-            {options.map((option, index) => (
+            <option value="">Please select</option>
+            {options?.map((option, index) => (
+                <option key={index} value={option?.value}>
+                    {option?.title}
+                </option>
+            ))}
+        </select>
+    </div>
+  );
+};
+
+export const SelectCategory: React.FC<SelectProps> = ({selectedValue, computerType, options, navbar, name, label, onChange }) => {
+  return (
+    <div className='text-sm w-full'>
+      <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
+        <select disabled={computerType} value={selectedValue} className="w-full mt-1 px-2 py-2 text-navbar bg-main border border-border rounded" onChange={onChange}>
+            <option value="">Please select</option>
+            <option value="all">All</option>
+            {options?.map((option, index) => (
                 <option key={index} value={option?.value}>
                     {option?.title}
                 </option>
@@ -80,7 +97,7 @@ export const SelectMonitor: React.FC<SelectProps> = ({selectedValue, computerTyp
       <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
         <select value={selectedValue} className="w-full mt-2 px-2 py-2 text-navbar bg-main border border-border rounded" onChange={onChange}>
             <option value="">Please select</option>
-            {options.map((option, index) => (
+            {options?.map((option, index) => (
                 <option key={index} value={option?.value}>
                     {option?.title}
                 </option>

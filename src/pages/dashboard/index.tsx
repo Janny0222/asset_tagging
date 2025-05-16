@@ -1,75 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
-import { lusitana } from '@/styles/font';
 import { lato } from '@/styles/font';
-import TableSkeleton, { CardSkeleton } from '@/components/ui/skeleton';
-import Card from '@/components/ui/cards';
-import { Suspense } from 'react';
-import Oldunit from '@/components/ui/tables/oldunit';
-import OldMobile from '@/components/ui/tables/oldunit-mobile';
-import ToggleButton from '@/components/ToggleButton';
-import BarChart from '@/components/BarChart';
-import { User } from '@/lib/definition';
-import jwt, { JwtPayload} from 'jsonwebtoken';
 import Head from 'next/head';
-import PieChartComponent from '@/components/Charts/PieChart';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+import { useCompanyStore } from '@/stores/companyStore';
+import { useAssetInventoryStore } from '@/stores/assetInventoryStore';
+import { useCategoryStore } from '@/stores/categoryStore';
 
 export default function Page() {
-  // const [user, setUser] = useState<User | null>(null);
-  // const [count, setCount] = useState<number | null>(null);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
-  // const [desktopToCount, setDesktopToCount] = useState<number | null>(null)
-  // const [laptopToCount, setLaptopToCount] = useState<number | null>(null)
-  // const [mobileCount, setMobileCount] = useState<number | null>(null)
-  const [triggerValue, setTriggerValue] = useState<string>("graph")
-  
-  // const fetchData = async () => {
-  //   try {
-  //     const [desktop, mac, apple, system, laptop, cellphone] = await Promise.all([
-  //       fetch(`api/computer_type/desktop`),
-  //       fetch(`api/computer_type/mac`),
-  //       fetch(`api/computer_type/apple`),
-  //       fetch(`api/computer_type/system`),
-  //       fetch(`api/computer_type/laptop`),
-  //       fetch(`api/countMobile`)
-  //     ]);
-  //     if (!desktop.ok || !laptop.ok) {
-  //       throw new Error('Failed to fetch data');
-  //     }
-  //     const desktopData = await desktop.json();
-  //     const macData = await mac.json();
-  //     const appleData = await apple.json();
-  //     const systemData = await system.json();
-  //     const laptopData = await laptop.json();
-  //     const mobileData = await cellphone.json()
-      
-  //     setDesktopToCount(desktopData.count + macData.count + systemData.count + appleData.count);
-  //     setLaptopToCount(laptopData.count);
-  //     setMobileCount(mobileData.count);
-  //   } catch (error) {
-  //     setError('Error fetching data');
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
-  
- 
-  // useEffect(() => {
-  //   const delayTime = 1000;
-  //   const delayTimer = setTimeout(() => {
-  //     fetchData()
-  //   }, delayTime);
-  //   return () => clearTimeout(delayTimer);
-  // }, []);
-  
+  const { companyData } = useCompanyStore()
+  const { assetInventoryData, fetchAllAssetInventoryData } = useAssetInventoryStore()
+  const { categoryData, fetchCategoryData } = useCategoryStore()
+  const [loading, setLoading] = useState(true);
 
-
-  
-  const handleTrigger = () =>{
-   setTriggerValue(triggerValue === 'graph' ? 'detail' : 'graph')
-  }
-  
+  useEffect(() => {
+    fetchCategoryData();
+    fetchAllAssetInventoryData();
+  }, [fetchCategoryData, fetchAllAssetInventoryData]);
+  useEffect(() => {
+    Aos.init({
+      duration: 800,
+      // easing: 'ease-in-out',
+      once: false, // Allows repeat animations   // whether animation should happen only once
+    });
+  }, []);
+  const cleanCost = (value: string | number) => typeof value === 'string' ? parseFloat(value.replace(/[₱,]/g, '')) : Number(value);
   return (
     <Layout>
       <>
@@ -79,94 +35,70 @@ export default function Page() {
             <meta name='viewport' content='width=device-width, initial-scale=1' />
         </Head>
       <div className='p-1 border rounded shadow-2xl relative min-h-screen  bg-white'>
-        <div className="p-3 rounded-t-lg bg-navbar mb-1">
+        <div className="p-3 rounded-t-md bg-navbar mb-1">
           <h1 className={`${lato.className} text-xl md:text-xl text-white sm:text-left`}>Summary</h1>
-        </div>
-        <div className="px-4 overflow-y-hidden rounded-lg bg-white shadow-md border">
-            {/* <div className='flex flex-col pb-2'>
-                <h3 className='text-2xl'>Inventory</h3>
-                <ToggleButton loading={loading} onChange={handleTrigger}/>
-            </div> */}
-            {/* <div className='grid gap-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-[500px] lg:w-auto md:w-auto'>
-              {triggerValue === 'detail' ? (
-                <>
-                {(desktopToCount === null || laptopToCount === null) && <><CardSkeleton /> <CardSkeleton /> <CardSkeleton /></>}
-                {desktopToCount !== null && laptopToCount !== null && (
-                  <>
-                    <Card title="Desktop" value={desktopToCount} type="desktop" />
-                    <Card title="Laptop" value={laptopToCount} type="laptop" />
-                    <Card title="Cellphone" value={mobileCount} type="cellphone" />
-                  </>
-                )}
-                </>
-              ): null}
-            </div> */}
-            <div className="">
-            
-              {triggerValue === 'graph' ? (
-              <>
-                {/* <div className=''>
-                  <h6 className='text-center border-b-2 border-x-2 border-b-current'>GPC</h6>
-                  <DoughnutChart tableName='gpc_inventory' mobileTable='gpc_mobile_inventory'/>
-                </div>
-                <div className=''>
-                  <h6 className='text-center border-b-2 border-x-2 border-b-current'>LSI</h6>
-                  <DoughnutChart tableName='lsi_inventory' mobileTable='lsi_mobile_inventory'/>
-                </div>
-                <div className=''>
-                  <h6 className='text-center border-b-2 border-x-2 border-b-current'>GKC</h6>
-                  <DoughnutChart tableName='gkc_inventory' mobileTable='gkc_mobile_inventory'/>
-                </div>
-                <div className=''>
-                  <h6 className='text-center border-b-2 border-x-2 border-b-current'>GSRC</h6>
-                  <DoughnutChart tableName='gsrc_inventory' mobileTable='gsrc_mobile_inventory'/>
-                </div> */}
-                
-                  {/* <PieChartComponent /> */}
-                
-              </>
-              ): null}
-            </div>
-        </div>
-
-        {/* Trigger for Detail */}
-        {/* {triggerValue === 'detail' ? (
-            <>
-        <div className="p-2 my-1 rounded-t-lg bg-navbar">
-          <h1 className={`${lusitana.className} text-white text-xl md:text-[15px] sm:text-[10px]`}>Desktop/Laptop Unit/s 5years old and Above</h1>
-        </div>
-        <div className="  rounded-lg shadow-md border">
-            <div className="grid">
-              <Suspense fallback={<TableSkeleton />}>
-              {(desktopToCount === null || laptopToCount === null) && <TableSkeleton />}
-               <Oldunit />
-              </Suspense>
-            </div>
-        </div>
-         
-        <div className="p-2 mt-2 rounded-t-lg bg-navbar">
-          <h1 className={`${lusitana.className} text-white text-xl md:text-[15px] sm:text-[10px]`}>Mobile Issued 5 years old and above </h1>
-        </div>
-        <div className='p-1  rounded-t-lg shadow-md border'>
-          <div className='grid'>
-            <OldMobile />
           </div>
-        </div>
-        </>
-        ) : '' }
-        
-        {triggerValue === 'graph' ? (
-              <>
-            <div className="p-2 mt-2 rounded-t-lg bg-navbar mb-1" >
-              <h1 className={`${lusitana.className} text-white text-xl md:text-[15px] sm:text-[10px] `}>Old Units with more then 5 years of age</h1>
-            </div>
-            <div className="p-1 bg-white rounded-lg shadow-md border">
-              <div className='flex justify-center lg:h-[400px]'>
-                <BarChart />
+          <div className='container mx-auto mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-3'>
+            {companyData.map((company, index) => (
+              <div key={index} className='col-span-1 lg:col-span-2 border-2 border-black rounded' data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom"
+              data-aos-offset="100">
+                <div>
+                  <h1 className='text-center border-b-2 font-bold text-green-800 border-black py-4'>
+                    {company.name}
+                  </h1>
+                  <table style={{ width: '100%' }} className='table-auto'>
+                    <thead className='border-b-2 border-grassy-500'>
+                      <tr role='row' className=' border-x-2 border-b-2' key={index}>
+                        <th className='text-left border-x-2 p-2'>Asset Category</th>
+                        <th className='text-left border-x-2 p-2'>Total Assets</th>
+                        <th className='text-left border-x-2 p-2'>Total Costs</th>
+                        <th className='text-left border-x-2 p-2'>New Unit</th>
+                      </tr>
+                      
+                    </thead>
+                    <tbody>
+                    {categoryData.map((category, index) => {
+                      const totalAssets = assetInventoryData.filter(
+                        (asset) => asset.company_id === company.id && asset.category_id === category.id
+                      ).length;
+                      const totalCost = assetInventoryData
+                        .filter((asset) => asset.company_id === company.id && asset.category_id === category.id)
+                        .reduce((total, asset) => total + cleanCost(asset.cost!), 0);
+                        const formattedTotalCost = totalCost.toLocaleString();
+                      return (
+                        <tr role='row' className='border-b-2 ' key={index}>
+                          <td className='border-x-2 p-2'>{category.name}</td>
+                          <td className='border-x-2 p-2'>{totalAssets}</td>
+                          <td className='border-x-2 p-2'>₱ {formattedTotalCost}</td>
+                        </tr>
+                      );
+                    })}
+                    </tbody>
+                    <tfoot>
+                      <tr className='border-b-2'>
+                        <td className='border-x-2 p-2 font-bold'>Total</td>
+                        <td className='border-x-2 p-2 font-bold'>
+                          {categoryData.reduce((total, category) => {
+                            const totalAssets = assetInventoryData.filter(
+                              (asset) => asset.company_id === company.id && asset.category_id === category.id
+                            ).length;
+                            return total + totalAssets;
+                          }, 0)}
+                        </td>
+                        <td className='border-x-2 p-2 font-bold'>
+                          ₱ {assetInventoryData
+                            .filter((asset) => asset.company_id === company.id)
+                            .reduce((total, asset) => total + cleanCost(asset.cost!), 0)
+                            .toLocaleString()}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
               </div>
-            </div>
-            </>
-            ) : !triggerValue } */}
+            ))}
+          </div>
       </div>
       </>
     </Layout>

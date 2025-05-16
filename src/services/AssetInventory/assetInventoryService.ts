@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { AssetInventoryProps } from "@/lib/definition";
 import { getSession } from "next-auth/react";
+import { sequelize } from "@/lib/db";
 
 interface AssetInventoryResponse {
     getAllActiveAsset: AssetInventoryProps[];
@@ -10,11 +11,11 @@ interface AssetInventoryResponse {
 
 
 export const getAllAssetInventory = async (): Promise<AssetInventoryProps[]> => {
-    const {data} = await axios.get<AssetInventoryProps[]>('/api/assetInventory');
+    const {data} = await axios.get<AssetInventoryProps[]>(`/api/assetInventory`);
     return data
 }
 
-export const getAllAssetInventoryByCategoryAndCompanyId = async (category_id: number, company_id: number): Promise<AssetInventoryResponse> => {
+export const getAllAssetInventoryByCategoryAndCompanyId = async (category_id: number | string, company_id: number): Promise<AssetInventoryResponse> => {
     const session = await getSession();
     try {
         const {data}: AxiosResponse<AssetInventoryResponse> = await axios.get<AssetInventoryResponse>(`/api/assetInventory/${category_id}/category`, { 
@@ -127,3 +128,5 @@ export const removeAssetInventory = async (asset_id: number): Promise<AssetInven
         }
     }
 }
+
+
