@@ -449,7 +449,7 @@ export interface AssetInventoryProps {
     specs?: string;
     remarks?: string;
     company_id?: number;
-    category_id?: number;
+    category_id?: any;
     invoice_date?: string;
     invoice_number?: string; 
     date_deployed?: string; // For Computer, Printer and Cellphone only

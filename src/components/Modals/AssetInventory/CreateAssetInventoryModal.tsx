@@ -14,7 +14,7 @@ const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProp
   const { selectedCompany} = useCompanyStore()
   const { selectedCategory } = useCategoryStore()
   const[formData, setFormData] = useState<AssetInventoryProps>({
-    category_id: selectedCategory?.id,
+    category_id: selectedCategory?.id!,
     company_id: selectedCompany?.id
   });
     const[error, setError] = useState<string>('');
