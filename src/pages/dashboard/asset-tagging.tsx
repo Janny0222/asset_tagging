@@ -21,7 +21,11 @@ const Index = () => {
         <meta name="description" content="Company Asset Tagging" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <TaggingComponents />
+      <div className='bg-white min-h-screen p-1'>
+        <div>
+          <TaggingComponents />
+        </div>
+      </div>
     </Layout>
   )
 }

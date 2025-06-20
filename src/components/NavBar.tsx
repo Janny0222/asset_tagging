@@ -12,11 +12,17 @@ const NavBar = () => {
     // const { tableData, selectedCompany, setSelectedCompany } = useContext(CompanyContext);
     const {data: session} = useSession()
     const [openMaintenance, setOpenMaintenance] = useState(false)
-    const [openInventory, setOpenInventory] = useState(false)
+    const [openOthers, setOpenOthers] = useState(false)
+    // const [openInventory, setOpenInventory] = useState(false)
     const {fetchCompanyData, selectedCompany, companyData, setSelectedCompany } = useCompanyStore()
+
     const pathname = usePathname()
+
     const toggleMaintenance = () => setOpenMaintenance(!openMaintenance)
-    const toggleInventory = () => setOpenInventory(!openInventory)
+    const toggleOthers = () => setOpenOthers(!openOthers)
+
+    // const toggleInventory = () => setOpenInventory(!openInventory)
+
     const handleLogout = async () => {
         await signOut({ callbackUrl: '/login' })
     }
@@ -177,13 +183,38 @@ const NavBar = () => {
                         </Menu.Item>
                         <Menu.Item>
                             <Link href={`/dashboard/inventory`} className={`hover:bg-navbar hover:text-white text-gray-800 group w-full ${!session?.user ? 'hidden' : 'flex'} px-2 justify-start items-start rounded-md py-2 text-sm`}>
-                                    Equipment
+                                    Assets
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
                             <Link href="/dashboard/asset-tagging" className={`hover:bg-navbar hover:text-white text-gray-800 group w-full ${!session?.user ? 'hidden' : 'flex'} px-2 justify-start items-start rounded-md py-2 text-sm`}>
                                     Asset Tagging
                             </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <>
+                            <button onClick={toggleOthers} className='flex  justify-start gap-2 items-center w-full text-left text-gray-800  rounded-md'>
+                                <Link href={'#'} className={`  text-gray-800 group w-full ${!session?.user ? 'hidden' : 'flex'} px-2 justify-start items-start rounded-md py-2 text-sm`}>
+                                    Others
+                                </Link>
+                                <span className="ml-auto ">
+                                        {openOthers ? <FaChevronDown /> : <FaChevronRight />}
+                                </span>
+                            </button>
+                            {openOthers && (
+                                <div className={`w-full p-2 bg-gray-100 transitions text-black`}>
+                                    <Link href="/others/supplies" className="hover:font-bold hover:border-b-2 border-dry  group w-full flex px-2 py-2 text-sm">
+                                        IT Supplies
+                                    </Link>
+                                    {/* <Link href="/maintenance/inventory-type" className="hover:font-bold over:font-bold hover:border-b-2 border-dry group w-full flex px-2 py-2 text-sm">
+                                        Add Inventory Type
+                                    </Link> */}
+                                   {/* <Link href="/maintenance/category" className="hover:font-bold hover:border-b-2 border-dry  group w-full flex px-2 py-2 text-sm">
+                                        Category List
+                                    </Link> */}
+                                </div>
+                            )}
+                            </>
                         </Menu.Item>
                         <Menu.Item>
                             <>
@@ -196,7 +227,7 @@ const NavBar = () => {
                                 </span>
                             </button>
                             {openMaintenance && (
-                                <div className={`w-full p-2 bg-navbar text-white`}>
+                                <div className={`w-full p-2 bg-gray-100 text-black`}>
                                     <Link href="/maintenance/company" className="hover:font-bold hover:border-b-2 border-dry  group w-full flex px-2 py-2 text-sm">
                                         Company List
                                     </Link>

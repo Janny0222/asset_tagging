@@ -36,6 +36,7 @@ const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProp
         fetchAssetInventoryData()
         setModalOpen(false)
         setFormData({});
+        setError('')
     } catch (error: unknown) {
       if(error instanceof Error) {
         setError(error.message);
@@ -81,41 +82,41 @@ const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProp
             <h2 className='text-2xl font-bold text-black text-left'> Create {selectedCategory?.name}  </h2>
             <form onSubmit={handleSubmit} className='grid grid-cols-8 gap-6 text-left mt-6'>
             <div className='col-span-4'>
-                <Input name='person_in_charge' label={'Person In-charge'} navbar placeholder="Person In-charge" type="text" bg={false} onChange={handleChange} value={formData?.person_in_charge || ''} />
+                <Input name='person_in_charge' label={'Person In-charge'} navbar placeholder="Person In-charge" type="text" bg onChange={handleChange} value={formData?.person_in_charge || ''} />
             </div>
             <div className='col-span-2'>
-                <Input name='department' label={'Department'} value={formData?.department || ''} navbar placeholder="Department" type="text" bg={false} onChange={handleChange} />
+                <Input name='department' label={'Department'} value={formData?.department || ''} navbar placeholder="Department" type="text" bg onChange={handleChange} />
             </div>
             <div className='col-span-2'>
-                <Input name='invoice_number' label={'Invoice Number'} value={formData?.invoice_number || ''} navbar placeholder="Invoice Number" type="text" bg={false} onChange={handleChange} />
+                <Input name='invoice_number' label={'Invoice Number'} value={formData?.invoice_number || ''} navbar placeholder="Invoice Number" type="text" bg onChange={handleChange} />
             </div>
             <div className='col-span-2'>
-                <InputDate name='invoice_date' label={'Invoice Date'} value={formData.invoice_date} navbar type="date" bg={false} onChange={handleChange} /> 
+                <InputDate name='invoice_date' label={'Invoice Date'} value={formData.invoice_date} navbar type="date" bg onChange={handleChange} /> 
             </div>
             <div className='col-span-2'>
-              <InputCost name='cost' label='Cost' navbar placeholder="₱0.00" value={formData?.cost || ''} type="text" bg={false} onChange={handleCostChange} onBlur={handleBlur} />
+              <InputCost name='cost' label='Cost' navbar placeholder="₱0.00" value={formData?.cost || ''} type="text" bg onChange={handleCostChange} onBlur={handleBlur} />
             </div>
             <div className='col-span-2'>
-                <Input name='supplier' label={'Supplier'} value={formData.supplier || ''} navbar placeholder="Supplier" type="text" bg={false} onChange={handleChange} />
+                <Input name='supplier' label={'Supplier'} value={formData.supplier || ''} navbar placeholder="Supplier" type="text" bg onChange={handleChange} />
             </div>
             <div className='col-span-2'>
-                <Input name='model_number' label={'Model Number'} value={formData.model_number || ''} navbar placeholder="Model Number" type="text" bg={false} onChange={handleChange} />
+                <Input name='model_number' label={'Model Number'} value={formData.model_number || ''} navbar placeholder="Model Number" type="text" bg onChange={handleChange} />
             </div>
             <div className='col-span-3 leading-3'>
-              <TextArea name='asset_info' label={'Asset Info'} value={formData.asset_info || ''} navbar placeholder="Asset Info" onChange={handleChange} />
+              <TextArea name='asset_info' label={'Asset Info'} value={formData.asset_info || ''} navbar placeholder="Asset Info" bg onChange={handleChange} />
               <span className='text-[10px] text-red-500'><em>*Separate Asset Info with a comma</em></span>
             </div>
             <div className='col-span-3 leading-3'>
-              <TextArea name='specs' label={'Specification'} value={formData.specs || ''} navbar placeholder="Specification" onChange={handleChange} />
+              <TextArea name='specs' label={'Specification'} value={formData.specs || ''} navbar placeholder="Specification" bg onChange={handleChange} />
               <span className='text-[10px] text-red-500'><em>*Separate Specification with a comma</em></span>
             </div>
             <div className='col-span-2 leading-3'>
-              <TextArea name='remarks' label={'Remarks'} value={formData.remarks || ''} navbar placeholder="Remakrs" onChange={handleChange} />
+              <TextArea name='remarks' label={'Remarks'} value={formData.remarks || ''} navbar placeholder="Remakrs" bg onChange={handleChange} />
               <span className='text-[10px] text-red-500'><em>*Separate Remarks with a comma</em></span>
             </div>
             <div className='col-span-8 grid grid-cols-6'>
               <div className='col-span-3'>
-                <InputDate name='date_deployed' label={'Date Deployed'} value={formData.date_deployed} navbar type="date" bg={false} onChange={handleChange} />
+                <InputDate name='date_deployed' label={'Date Deployed'} value={formData.date_deployed} navbar type="date" bg onChange={handleChange} />
               </div>
             </div>
             <span className='text-red-600 font-bold italic'>{error}</span>

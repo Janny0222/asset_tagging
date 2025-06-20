@@ -5,7 +5,6 @@ import React from 'react'
 const Toggle = () => {
     const {status, toggleStatus } = useStatusToggleChange()
 
-    console.log('Status:', status)
   return (
     <div className='flex items-center flex-col-reverse me-5'>
         <input 

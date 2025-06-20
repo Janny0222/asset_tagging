@@ -9,34 +9,40 @@ import { useCompanyStore } from '@/stores/companyStore'
 import { useStatusToggleChange } from '@/stores/statusToggleStore'
 import { useMessage } from '@/context/MessageContext'
 
-const TransferAssetDataModal = ({modalOpen, setModalOpen} : ChildrenModalProps) => {
+const TransferAssetDataModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps) => {
     const {selectedAssetInventory, transferAsset} = useAssetInventoryStore()
     const { companyData} = useCompanyStore()
     const [formData, setFormData] = useState<AssetInventoryProps>({})
     const {message, setMessage} = useMessage()
+    const [companyId, setCompanyId] = useState<number>(selectedAssetInventory?.company_id!);
     
     const companyList: Option[] = companyData.map((company) => ({
         value: company.id!,
         title: company.name!
     }))
-    const handleSelectChange = (field: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        console.log(`Changing ${field} to ${value}`); // Log the change
-        setFormData((prevData) => ({
-            ...prevData,
-            [field]: value,
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = e.target.value;
+        setCompanyId(+selectedValue);
+        const selectedItem = companyData.find(item => item.id === +selectedValue);
+
+        setFormData((prev) => ({
+            ...prev,
+            company_id: selectedItem?.id!,
         }));
-      };
+        
+        
+    }
     const handleTransfer = async () => {
         if(selectedAssetInventory) {
             await transferAsset(selectedAssetInventory?.id!, formData)
             setMessage('Successfully transferred this data!')
         }
     }
-
+    console.log(selectedAssetInventory?.company_id)
     const handleCloseModal = () => {
         setModalOpen(false)
         setFormData({})
+        setCompanyId(selectedAssetInventory?.company_id!);
     }
   return (
     
@@ -48,7 +54,7 @@ const TransferAssetDataModal = ({modalOpen, setModalOpen} : ChildrenModalProps) 
             <p className='text-lg text-text'></p>
             <form  className='grid grid-cols-4 gap-6 text-left mt-6'>
             <div className='col-span-3'>
-                <Select label='Select Company:' navbar options={companyList} name={'company_id'} selectedValue={selectedAssetInventory?.company_id} onChange={handleSelectChange('company_id')} />
+                <Select label='Select Company:' navbar options={companyList} name='company_id' selectedValue={companyId!} onChange={handleSelectChange} />
             </div>
             <div className='col-span-6 mt-5'>
                 <span className='text-green-600 font-bold italic'>{message}</span>

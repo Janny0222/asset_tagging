@@ -8,11 +8,13 @@ import { HiPlusCircle } from 'react-icons/hi'
 import { IoClose } from 'react-icons/io5'
 import domtoimage from 'dom-to-image';
 import QRGenerator from '@/components/QRCodeGenerator/QRGenerator'
+import { useAssetInventoryStore } from '@/stores/assetInventoryStore'
 
 const ReprintTaggingModal = ({ modalOpen, setModalOpen, name} : ChildrenModalProps) => {
     const { fetchSpecificTaggingDatas, selectedTagging } = useTaggingStore()
     const { fetchSelectedCompanyData, selectedCompany } = useCompanyStore()
     const { fetchSpecificCategoryData, selectedCategory } = useCategoryStore()
+    const {selectedAssetInventory} = useAssetInventoryStore()
     const [error, setError] = useState<string >('')
 
     const taggingRef = useRef<HTMLDivElement>(null);
@@ -85,7 +87,7 @@ const ReprintTaggingModal = ({ modalOpen, setModalOpen, name} : ChildrenModalPro
                                     className='text-center text-white flex justify-center items-center'>   
                                     <div className='flex flex-col gap-2'>
                                             <div className=''>
-                                                <QRGenerator text={selectedTagging?.tagging?.toUpperCase()!} />
+                                                <QRGenerator text={selectedAssetInventory?.asset_info!} />
                                             </div>
                                             <span className='text-white'>
                                                 {selectedTagging?.tagging}

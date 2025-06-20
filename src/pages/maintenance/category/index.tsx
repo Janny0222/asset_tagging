@@ -11,7 +11,12 @@ const Index = () => {
         <title>Category Maintenance</title>
         <meta name="description" content="Category Maintenance" />
       </Head>
-        <AddCategoryComponent />
+      <div className='bg-white min-h-screen p-1'>
+        <div>
+          <AddCategoryComponent />
+        </div>
+      </div>
+        
     </>
   )
 }

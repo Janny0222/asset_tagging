@@ -27,7 +27,6 @@ const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps
         setModalOpen(false)
         setError('')
     }
-    console.log('taggingData:' , selectedAssetInventory)
     useEffect(() => {
         if(modalOpen && id) {
             fetchAllTaggingData(selectedCompany?.id!, selectedCategory?.id!)
@@ -115,7 +114,7 @@ const GenerateTaggingModal = ({modalOpen, setModalOpen, id} : ChildrenModalProps
                                     className='text-center text-white flex justify-center items-center'>   
                                     <div className='flex flex-col gap-2'>
                                             <div className=''>
-                                                <QRGenerator text={selectedAssetInventory?.specs!} />
+                                                <QRGenerator text={selectedAssetInventory?.asset_info!} />
                                             </div>
                                             <span className='text-white'>
                                                 {selectedCompany?.code?.toUpperCase()+ '-' + selectedCategory?.name?.toUpperCase().slice(0, 3)! + control_no}

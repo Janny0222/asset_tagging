@@ -34,6 +34,7 @@ const AddCategoryComponent = () => {
         key: 'category_name',
         label: 'Category Name'
     },
+    { key: 'actions', label: 'Actions' },
   ]
 
   return (

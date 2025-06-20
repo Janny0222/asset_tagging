@@ -45,7 +45,7 @@ const tableHead: TableColumn[] = [
     { key: 'specs', label: 'Specifications' },
     { key: 'remarks', label: 'Remarks' },
     { key: status === 'active' ? 'date_deployed' : 'date_returned', label: status === 'active' ? 'Date Deployed' : 'Date Returned' },
-    
+    { key: 'actions', label: 'Actions' },
   ];
     
     useEffect(() => {
@@ -55,9 +55,9 @@ const tableHead: TableColumn[] = [
             } else {
                 fetchAssetInventoryData();
             }
-        } 
+        }
     }, [selectedCompany, fetchAssetInventoryData, selectedCategory, status, fetchAllAssetInventoryData])
-
+    
     // Search
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value)
@@ -87,7 +87,12 @@ const tableHead: TableColumn[] = [
             )
         );
     };
-
+    useEffect(() => {
+        if (selectedCompany?.id !== filteredAssetInventory[0]?.company_id!) {
+            
+            setCurrentPage(1)
+        }
+    }, [selectedCompany, filteredAssetInventory])
     
     // Pagination and data
     const itemsPerPage = 7
@@ -137,36 +142,36 @@ const tableHead: TableColumn[] = [
         setModalDeleteAssetInventory(true)
     }
     // Table Data
-const renderRow = (data: AssetInventoryProps) => {
-    return (
-        <>
-            <td className={`${Text} truncate`}>{highlightText(data.person_in_charge || '', searchQuery)}</td>
-            <td className={`${Text} `}>{highlightText(data.department || '', searchQuery)}</td>
-            <td className={`${Text} `}>{highlightText(data.invoice_number || '', searchQuery)}</td>
-            <td className={`${Text} `}>{highlightText(data.invoice_date || '', searchQuery)}</td>
-            <td className={`${Text} `}>{highlightText(data.cost || '', searchQuery)}</td>
-            <td className={`${Text} `}>{highlightText(data.model_number || '', searchQuery)}</td>
-            <td className={`${Text} `}>{highlightText(data.supplier || '', searchQuery)}</td>
-            <td className={`${Text} `}>{data.asset_info?.split(',').map((asset, index) => (index >= 0 && (<div key={index}>{highlightText(asset.trim(), searchQuery)}</div>)))}</td>
-            <td className={`${Text} `}>{data.specs?.split(',').map((spec, index) => (index >= 0 && (<div key={index}>{highlightText(spec.trim(), searchQuery)}</div>)))}</td>
-            <td className={`${Text} text-wrap `}>{highlightText(data?.remarks || '', searchQuery)}</td>
-            <td className={`${Text} `}>{status === 'active' ? data.date_deployed || '' : data.date_returned || ''}</td>
-            <td className={` ${Text} `}>
-                <div className='flex gap-2 justify-center items-center'>
-                    <button onClick={() => handleEditData(data.id)} aria-label="Edit item" className=" bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
-                        <FaEdit  className="text-text" />
-                    </button>
-                    <button onClick={() => handleGenerateTaggingData(data.id)} aria-label="Delete item" className="bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
-                        <FaTag className="text-blue-700" />
-                    </button>
-                    <button onClick={() => hanldeDeleteData(data.id)} aria-label="Delete item" className="bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
-                        <MdDelete className="text-red-500" />
-                    </button>
-                </div>
-            </td>
-        </>
-    )
-}
+    const renderRow = (data: AssetInventoryProps) => {
+        return (
+            <>
+                <td className={`${Text} truncate`}>{highlightText(data.person_in_charge || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.department || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.invoice_number || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.invoice_date || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.cost || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.model_number || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.supplier || '', searchQuery)}</td>
+                <td className={`${Text} `}>{data.asset_info?.split(',').map((asset, index) => (index >= 0 && (<div key={index}>{highlightText(asset.trim(), searchQuery)}</div>)))}</td>
+                <td className={`${Text} `}>{data.specs?.split(',').map((spec, index) => (index >= 0 && (<div key={index}>{highlightText(spec.trim(), searchQuery)}</div>)))}</td>
+                <td className={`${Text} text-wrap `}>{data.remarks?.split(',').map((remark, index) => (index >= 0 && (<div key={index}>{highlightText(remark.trim(), searchQuery)}</div>)))}</td>
+                <td className={`${Text} `}>{status === 'active' ? data.date_deployed || '' : data.date_returned || ''}</td>
+                <td className={` ${Text} `}>
+                    <div className='flex gap-2 justify-center items-center'>
+                        <button onClick={() => handleEditData(data.id)} aria-label="Edit item" className=" bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
+                            <FaEdit  className="text-text" />
+                        </button>
+                        <button onClick={() => handleGenerateTaggingData(data.id)} aria-label="Delete item" className="bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
+                            <FaTag className="text-blue-700" />
+                        </button>
+                        <button onClick={() => hanldeDeleteData(data.id)} aria-label="Delete item" className="bg-white border-2 border-black text-white px-2 rounded py-1 flex-colo w-7 h-7">
+                            <MdDelete className="text-red-500" />
+                        </button>
+                    </div>
+                </td>
+            </>
+        )
+    }
   return (
     <>
     <GenerateTaggingModal 

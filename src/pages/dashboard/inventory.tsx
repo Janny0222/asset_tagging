@@ -19,7 +19,6 @@ const { categoryData, fetchCategoryData, selectedCategory, setSelectedCategory }
         value: category.id!,
         title: category.name!
     }))
-    console.log("Category List: " ,selectedCategory)
     const handleCategoryChange = (value: number) => {
         const selected = categoryData.find(category => category.id === value!);
         

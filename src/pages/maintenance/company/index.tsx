@@ -12,7 +12,11 @@ const Index = () => {
         <title>Company Maintenance</title>
         <meta name="description" content="Company Maintenance" />
       </Head>
-        <AddCompanyComponent />
+        <div className='bg-white min-h-screen p-1'>
+        <div>
+          <AddCompanyComponent />
+        </div>
+      </div>
     </Layout>
   )
 }

@@ -15,7 +15,7 @@ export const Input: React.FC<InputProps> = ({disabled, name, label, placeholder,
         onChange={onChange}
         value={value}
         disabled={disabled}
-        className={`w-full text-sm mt-1 p-2 border border-border rounded text-navbar bg-main`}
+        className={`w-full text-sm mt-1 p-2 border border-border rounded text-navbar bg-${bg ? 'main' : 'white'}`}
         
       />
     </div>
@@ -34,14 +34,14 @@ export const InputCost: React.FC<InputProps> = ({disabled, name, label, placehol
         onChange={onChange}
         value={value}
         disabled={disabled}
-        className={`w-full text-sm mt-1 p-2 border border-border rounded text-navbar bg-main`}
+        className={`w-full text-sm mt-1 p-2 border border-border rounded text-navbar bg-${bg ? 'main' : 'white'}`}
         onBlur={onBlur}
       />
     </div>
   );
 };
 
-export const InputDate: React.FC<InputProps> = ({disabled,onChange, navbar, name, value, label, type }) => {
+export const InputDate: React.FC<InputProps> = ({disabled,onChange, navbar, name, value, label, type, bg }) => {
   return (
     <div className='text-sm w-full'>
       <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
@@ -51,18 +51,18 @@ export const InputDate: React.FC<InputProps> = ({disabled,onChange, navbar, name
         type={type}
         value={value}
         onChange={onChange}
-        className={`w-full text-sm mt-1 p-[0.4rem] border border-border rounded text-navbar bg-main`}
+        className={`w-full text-sm mt-1 p-[0.4rem] border border-border rounded text-navbar bg-${bg ? 'main' : 'white'}`}
         disabled={disabled}
       />
     </div>
   );
 };
 
-export const Select: React.FC<SelectProps> = ({selectedValue, computerType, options, navbar, name, label, onChange }) => {
+export const Select: React.FC<SelectProps> = ({selectedValue, computerType, options, navbar, name, label, bg, onChange }) => {
   return (
     <div className='text-sm w-full'>
       <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
-        <select disabled={computerType} value={selectedValue} className="w-full mt-1 px-2 py-2 text-navbar bg-main border border-border rounded" onChange={onChange}>
+        <select disabled={computerType} value={selectedValue} className={`w-full mt-1 px-2 py-2 text-navbar bg-${bg ? 'main' : 'white'}  border border-border rounded`} onChange={onChange}>
             <option value="">Please select</option>
             {options?.map((option, index) => (
                 <option key={index} value={option?.value}>
@@ -107,7 +107,7 @@ export const SelectMonitor: React.FC<SelectProps> = ({selectedValue, computerTyp
   );
 };
 
-export const TextArea: React.FC<TextAreaProps> = ({disabled, name, label, navbar, placeholder, onChange, value, rows }) => {
+export const TextArea: React.FC<TextAreaProps> = ({disabled, name, label, navbar, placeholder, onChange, value, rows, bg }) => {
   return (
     <div className='text-sm w-full'>
       <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
@@ -119,7 +119,7 @@ export const TextArea: React.FC<TextAreaProps> = ({disabled, name, label, navbar
         value={value}
         rows={rows}
         disabled={disabled}
-        className="w-full text-sm mt-2 p-2 border border-border rounded text-navbar bg-main"
+        className={`w-full text-sm mt-2 p-2 border border-border rounded text-navbar bg-${bg ? 'main' : 'white'}`}
       />
     </div>
   );

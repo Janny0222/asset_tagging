@@ -34,7 +34,6 @@ const ArchiveSpecificAssetInventoryModal = ({ modalOpen, setModalOpen, onSubmit,
           console.log(error);
         }
       };
-      console.log("Status: ", status)
   return (
     <MainModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
         <div className='inline-block transitions inset-0 sm:w-4/5 border border-border shadow-xl rounded-2xl md:w-3/5 lg:w-2/5 w-full align-middle p-10 transform  h-full bg-main text-white'>

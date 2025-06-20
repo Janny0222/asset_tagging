@@ -36,6 +36,7 @@ const AddCompanyComponent = () => {
         key: 'table_name',
         label: 'Table Name'
     },
+    { key: 'actions', label: 'Actions' },
   ]
 
   return (

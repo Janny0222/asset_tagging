@@ -101,9 +101,9 @@ const TaggingComponents = () => {
  return (
     <>
     <ReprintTaggingModal modalOpen={reprintModal} setModalOpen={setReprintModal} name={selectedTagging?.tagging} />
-    <div className='bg-gray-200 min-h-full container mx-auto'>
+    <div className=' container mx-auto'>
         <div 
-            className='pt-5 min-h-screen  '>
+            className=' min-h-screen  '>
             <div className='bg-navbar text-black p-5'>
                 <h1 className='text-2xl font-medium text-white'> ASSET TAGGING </h1>
                 {/* <h1 className='uppercase font-semibold'>{selectedCompany?.name}</h1> */}

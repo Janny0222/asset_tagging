@@ -27,7 +27,7 @@ const Table =<T extends object> ({ tableHead, rowData, rowRender }: TableProps<T
                 {head.label}
               </th>
             ))}
-            <th scope='col' className='text-xs text-center text-white font-bold px-6 py-2 uppercase'> Actions </th>
+            
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-800">

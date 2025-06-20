@@ -258,7 +258,7 @@ export interface SelectProps {
     selectedValue?: number | string
     options?: Option[];
     onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-    
+    bg?: boolean;
 }
 
 export interface InputProps {
@@ -283,6 +283,7 @@ export interface TextAreaProps {
     value?: string ;
     rows?: number;
     disabled?: boolean;
+    bg?: boolean;
   }
   // Date Input
 export interface InputDateProps {
@@ -462,4 +463,35 @@ export interface AssetInventoryProps {
 export interface StatusProps {
     id?: number;
     name?: string;
+}
+
+export interface SupplyInventoryProps {
+    id?: number;
+    item_code?: string;
+    item_name?: string;
+    manufacturer?: string;
+    description?: string;
+    item_cost?: string;
+    stocks?: number;
+    invoice_number?: string;
+    invoice_date?: string;
+}
+
+export interface DeployedSuppliesProps {
+    id?: number
+    item_code?: string;
+    person_in_charge?: string;
+    quantity?: number;
+    date_deployed?: string;
+    remarks?: string;
+}
+
+export interface ReturnedSuppliesProps {
+    id?: number
+    item_code?: string;
+    person_in_charge?: string;
+    quantity?: number;
+    date_deployed?: string;
+    date_returned?: string;
+    remarks?: string;
 }
