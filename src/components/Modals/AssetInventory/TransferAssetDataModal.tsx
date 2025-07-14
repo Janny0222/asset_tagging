@@ -28,9 +28,7 @@ const TransferAssetDataModal = ({modalOpen, setModalOpen, id} : ChildrenModalPro
         setFormData((prev) => ({
             ...prev,
             company_id: selectedItem?.id!,
-        }));
-        
-        
+        })); 
     }
     const handleTransfer = async () => {
         if(selectedAssetInventory) {

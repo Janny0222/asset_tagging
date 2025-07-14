@@ -43,7 +43,6 @@ const tableHead: TableColumn[] = [
     { key: 'supplier', label: 'Supplier' },
     { key: 'asset_info', label: 'Asset Info' },
     { key: 'specs', label: 'Specifications' },
-    { key: 'remarks', label: 'Remarks' },
     { key: status === 'active' ? 'date_deployed' : 'date_returned', label: status === 'active' ? 'Date Deployed' : 'Date Returned' },
     { key: 'actions', label: 'Actions' },
   ];
@@ -154,7 +153,6 @@ const tableHead: TableColumn[] = [
                 <td className={`${Text} `}>{highlightText(data.supplier || '', searchQuery)}</td>
                 <td className={`${Text} `}>{data.asset_info?.split(',').map((asset, index) => (index >= 0 && (<div key={index}>{highlightText(asset.trim(), searchQuery)}</div>)))}</td>
                 <td className={`${Text} `}>{data.specs?.split(',').map((spec, index) => (index >= 0 && (<div key={index}>{highlightText(spec.trim(), searchQuery)}</div>)))}</td>
-                <td className={`${Text} text-wrap `}>{data.remarks?.split(',').map((remark, index) => (index >= 0 && (<div key={index}>{highlightText(remark.trim(), searchQuery)}</div>)))}</td>
                 <td className={`${Text} `}>{status === 'active' ? data.date_deployed || '' : data.date_returned || ''}</td>
                 <td className={` ${Text} `}>
                     <div className='flex gap-2 justify-center items-center'>

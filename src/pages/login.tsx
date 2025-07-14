@@ -10,6 +10,7 @@ import { Input } from '@/components/UserInput';
 import Image from 'next/image';
 import { FiLogIn } from 'react-icons/fi';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function LoginPage() {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -42,13 +43,21 @@ export default function LoginPage() {
                 username,
                 password,
             });
-            console.log(`Results for NODE_ENV: ${process.env.NODE_ENV}`)
-            console.log('Response:', result);
 
             if (result?.error) {
                 setError(result.error);
+                toast.error(result.error, {
+                    position: "top-center",
+                    hideProgressBar: true,
+                });
             } else {
                 if(result?.ok) {
+                    toast.success('Login successful', 
+                        {
+                            position: "top-center",
+                            hideProgressBar: true,
+                        }
+                    );
                     const apiKey = session?.apiKey; // Get the API key from the session
                     if (apiKey) {
                         axios.defaults.headers['x-api-key'] = apiKey; // Set the header globally

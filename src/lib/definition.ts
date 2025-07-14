@@ -112,14 +112,15 @@ export type CreateList = {
     date_purchased: string;
 }
 
-export interface ServerAccountsInventory {
-    id: number;
-    name: string;
-    department: string;
-    username: string;
-    password: string;
-    is_active_id: number;
-    notes: string;
+export interface ServerAccountsProps {
+    id?: number;
+    name?: string;
+    company_id?: number
+    department?: string;
+    server_user?: string;
+    server_password?: string;
+    status?: string;
+    remarks?: string;
 }
 
 export interface ActivityLogInventory {
@@ -495,3 +496,5 @@ export interface ReturnedSuppliesProps {
     date_returned?: string;
     remarks?: string;
 }
+
+

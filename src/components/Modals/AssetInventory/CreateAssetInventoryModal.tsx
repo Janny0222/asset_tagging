@@ -8,6 +8,7 @@ import { useAssetInventoryStore } from '@/stores/assetInventoryStore'
 import { useCompanyStore } from '@/stores/companyStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { createAssetInventory } from '@/services/AssetInventory/assetInventoryService'
+import { toast } from 'react-toastify'
 
 const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProps ) => {
   const { fetchAssetInventoryData} = useAssetInventoryStore()
@@ -33,6 +34,7 @@ const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProp
             category_id: selectedCategory?.id
         }
         const res = await createAssetInventory(tableNameData);
+        toast.success(res.message)
         fetchAssetInventoryData()
         setModalOpen(false)
         setFormData({});
@@ -40,6 +42,7 @@ const CreateAssetInventoryModal = ({modalOpen, setModalOpen} : ChildrenModalProp
     } catch (error: unknown) {
       if(error instanceof Error) {
         setError(error.message);
+        toast.error(error.message);
         console.log(error);
       }
       

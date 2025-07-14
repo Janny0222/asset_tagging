@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Table from '../Table/Table'
-import index from '@/pages/others/supplies'
 import { useSupplyInventoryStore } from '@/stores/suppliesInventoryStore'
 import {  DeployedSuppliesProps, ReturnedSuppliesProps, SupplyInventoryProps } from '@/lib/definition'
-import { FaEdit } from 'react-icons/fa'
-import SendIcon from '@mui/icons-material/Send';
 import CreateITSupplyModal from '../Modals/ITSupply/CreateITSupplyModal'
 import DeployITSupplyModal from '../Modals/ITSupply/DeployITSupplyModal'
 import { useDeployedSuppliesStore } from '@/stores/deployedSuppliesStore'
@@ -43,7 +40,7 @@ const tabs = [
   { key: 'deployed', label: 'Deployed' },
   { key: 'return_history', label: 'Return History' },]
 
-  const Text = 'text-sm text-center items-center justify-center whitespace-nowrap px-5 py-3';
+const Text = 'text-sm text-center items-center justify-center whitespace-nowrap px-5 py-3';
 
 const SuppliesComponents = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -259,7 +256,7 @@ const SuppliesComponents = () => {
         <ReturnITSupplyModal modalOpen={openReturnSupplyModal} setModalOpen={setOpenReturnSupplyModal} id={specificDeployedSupply?.id} />
         <DeployITSupplyModal modalOpen={openDeploySupplyModal} setModalOpen={setOpenDeploySupplyModal} id={0} />
         <CreateITSupplyModal modalOpen={openCreateSupplyModal} setModalOpen={setOpenCreateSupplyModal} />
-        <div className='bg-gray-200 container mx-auto p-5'>
+        <div className='bg-gray-200 min-h-screen container mx-auto p-5'>
             <div>
                 <h1 className='text-2xl font-bold mb-5'>IT Supplies Management</h1>
                 

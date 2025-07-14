@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { SelectCategory } from '@/components/UserInput';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { Option } from '@/lib/definition';
-import InventoryComponents from '@/components/Inventory/InventoryComponents';
+import InventoryComponents from '@/components/Inventory/InventoryComponent';
 import Aos from 'aos';
 
 const Index = () => {

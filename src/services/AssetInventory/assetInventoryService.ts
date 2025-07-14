@@ -33,9 +33,9 @@ export const getAllAssetInventoryByCategoryAndCompanyId = async (category_id: nu
     }
 };
 
-export const createAssetInventory = async (assetInventoryData: AssetInventoryProps): Promise<AssetInventoryProps> => {
+export const createAssetInventory = async (assetInventoryData: AssetInventoryProps): Promise<{message: string, data: AssetInventoryProps}> => {
     try {
-        const response: AxiosResponse<AssetInventoryProps> = await axios.post('/api/assetInventory', assetInventoryData);
+        const response = await axios.post<{message: string, data: AssetInventoryProps}>('/api/assetInventory', assetInventoryData);
         return response.data;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {

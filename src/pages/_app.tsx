@@ -6,6 +6,8 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 import { MessageProvider } from '@/context/MessageContext';
+import 'react-toastify/dist/ReactToastify.css';
+import Toastify from '@/components/Toast/Toastify';
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -13,13 +15,10 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [])
   return (
   <SessionProvider session={pageProps.session}>
-    
     <MessageProvider>
-      
+        <Toastify />
         <Component {...pageProps} />
-      
     </MessageProvider>
-
   </SessionProvider>
   )
 }
