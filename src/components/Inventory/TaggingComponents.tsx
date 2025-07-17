@@ -13,8 +13,8 @@ import ReprintTaggingModal from "../Modals/Tagging/ReprintTaggingModal";
 
 
 const TaggingComponents = () => {
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  const [inputValue, setInputValue] = useState<string>('')
+  const [searchQuery, setSearchQuery] = useState<string | undefined>('')
+  const [inputValue, setInputValue] = useState<string | undefined>('')
   const [submitted, setSubmitted] = useState(false) 
   const { companyData } = useCompanyStore()
   const { fetchSpecificStatusData, selectedStatus } = useStatusStore()
@@ -28,8 +28,8 @@ const TaggingComponents = () => {
 
 
   useEffect(() => {
-    if(inputValue.length > 0 && submitted) {
-      fetchSpecificTaggingDatas(inputValue)
+    if(inputValue!.length > 0 && submitted) {
+      fetchSpecificTaggingDatas(inputValue!)
     }
   }, [inputValue, submitted,fetchSpecificStatusData, fetchSpecificTaggingDatas])
 
@@ -41,7 +41,7 @@ const TaggingComponents = () => {
       fetchCategoryData()
       const fetchComputerTagging = async () => {
         try {
-          const response: TaggingProps = await getSpecificTagging(inputValue)
+          const response: TaggingProps = await getSpecificTagging(inputValue!)
           // setSelectedTagging(response[0])
           
         } catch (error) {

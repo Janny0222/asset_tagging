@@ -14,6 +14,7 @@ import GenerateTaggingModal from '../Modals/Tagging/GenerateTaggingModal';
 import EditAssetInventoryModal from '../Modals/AssetInventory/EditAssetInventoryModal';
 import ArchiveSpecificAssetInventoryModal from '../Modals/AssetInventory/ArchiveSpecificAssetInventoryModal';
 import RemoveAssetDataInventory from '../Modals/AssetInventory/RemoveAssetDataInventory';
+import PaginationComponent from '../Pagination/Pagination';
 
 const Text = 'text-sm text-center items-center justify-center whitespace-nowrap px-5 py-3';
 
@@ -94,13 +95,41 @@ const tableHead: TableColumn[] = [
     }, [selectedCompany, filteredAssetInventory])
     
     // Pagination and data
-    const itemsPerPage = 7
+    const itemsPerPage = 5
     
     const handlePageChange = (pageNumber: number) => {
         if(pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber)
         }
     }
+
+    const generatePagination = () => {
+        const pages = [];
+        const total = totalPages;
+        const current = currentPage;
+
+        if (total <= 5) {
+            // Show all pages if few
+            for (let i = 1; i <= total; i++) pages.push(i);
+        } else {
+            const showRange = 2; // how many numbers before/after current page
+
+            // Near start
+            if (current <= 3) {
+            pages.push(1, 2, 3, 4, '...', total);
+            }
+            // Near end
+            else if (current >= total - 2) {
+            pages.push(1, '...', total - 3, total - 2, total - 1, total);
+            }
+            // In middle
+            else {
+            pages.push(1, '...', current - 1, current, current + 1, '...', total);
+            }
+        }
+
+        return pages;
+    };
     
     const {paginated, totalPages, totalFilteredCount} = useMemo(() => {
         const filteredItems = filteredData.filter((data) => {
@@ -215,31 +244,42 @@ const tableHead: TableColumn[] = [
                                 
                                 <Table tableHead={tableHead} rowData={paginated} rowRender={renderRow} />
                             
-                                <div className="relative right-auto flex my-4">
-                                <button
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                    className="px-4 py-2 bg-gray-200 rounded mr-2"
-                                >
-                                    Previous
-                                </button>
-                                {Array.from({ length: totalPages }, (_, i) => (
+                                {/* <div className="relative right-auto flex my-4">
                                     <button
-                                        key={i}
-                                        onClick={() => handlePageChange(i + 1)}
-                                        className={`px-4 py-2 ${currentPage === i + 1 ? 'bg-navbar text-white' : 'bg-gray-200'}`}
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className="px-4 py-2 bg-gray-200 rounded mr-2"
                                     >
-                                        {i + 1}
+                                        Previous
                                     </button>
-                                ))}
-                                <button
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                    className="px-4 py-2 bg-gray-200 rounded ml-2"
-                                >
-                                    Next
-                                </button>
-                            </div>
+
+                                    {generatePagination().map((page, index) =>
+                                        page === '...' ? (
+                                        <span key={index} className="px-3 py-2 text-gray-500">...</span>
+                                        ) : (
+                                        <button
+                                            key={index}
+                                            onClick={() => handlePageChange(Number(page))}
+                                            className={`px-4 py-2 mx-1 rounded ${
+                                            currentPage === page ? 'bg-navbar text-white' : 'bg-gray-200'
+                                            }`}
+                                        >
+                                            {page}
+                                        </button>
+                                        )
+                                    )}
+
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className="px-4 py-2 bg-gray-200 rounded ml-2"
+                                    >
+                                        Next
+                                    </button>
+                                </div> */}
+                                <div className='flex justify-center items-center my-4'>
+                                    <PaginationComponent count={totalPages} page={currentPage} onPageChange={(_, value) => handlePageChange(value)} />
+                                </div>
                                 </>
                             ) : (
                                 <div className='flex flex-colo text-navbar '>

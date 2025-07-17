@@ -37,8 +37,8 @@ const { categoryData, fetchCategoryData, selectedCategory, setSelectedCategory }
             <meta name='viewport' content='width=device-width, initial-scale=1' />
         </Head>
         <div className=' bg-white min-h-screen'>
-            <div className='p-2 w-full border-b bg-navbar/80 border-black flex'>
-                <div className='flex-btn gap-2 justify-evenly'>
+            <div className='p-2 w-full border-b bg-navbar/80 border-black flex justify-end '>
+                <div className='flex-btn gap-2'>
                     <div>
                         <label className='text-white mx-auto'>Select Category</label>
                     </div>
