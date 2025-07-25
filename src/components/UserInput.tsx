@@ -79,8 +79,7 @@ export const SelectCategory: React.FC<SelectProps> = ({selectedValue, computerTy
     <div className='text-sm w-full'>
       <label htmlFor={name} className={`${navbar ? 'text-navbar' : 'text-white'} font-semibold text-xs`}>{label}</label>
         <select disabled={computerType} value={selectedValue} className="w-full mt-1 px-2 py-2 text-navbar bg-main border border-border rounded" onChange={onChange}>
-            <option value="">Please select</option>
-            <option value="all">All</option>
+            <option key={0} value={0}>All</option>
             {options?.map((option, index) => (
                 <option key={index} value={option?.value}>
                     {option?.title}

@@ -15,6 +15,11 @@ export const getAllAssetInventory = async (): Promise<AssetInventoryProps[]> => 
     return data
 }
 
+export const getAllAssetInventoryByCompanyID = async (company_id: number): Promise<AssetInventoryProps[]> => {
+    const {data} = await axios.get<AssetInventoryProps[]>(`/api/assetInventory/${company_id}/all`);
+    return data
+}
+
 export const getAllAssetInventoryByCategoryAndCompanyId = async (category_id: number | string, company_id: number): Promise<AssetInventoryResponse> => {
     const session = await getSession();
     try {

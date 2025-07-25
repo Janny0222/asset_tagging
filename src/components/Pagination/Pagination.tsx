@@ -19,6 +19,7 @@ const PaginationComponent = ({count, page, onPageChange} : PaginationProps) => {
         shape="rounded"
         onChange={onPageChange}
         page={page}
+        size="large"
         siblingCount={1}
         boundaryCount={1} 
         renderItem={(item) => (

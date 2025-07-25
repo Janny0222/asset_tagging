@@ -9,41 +9,64 @@ import ReturnITSupplyModal from '../Modals/ITSupply/ReturnITSupplyModal'
 import { useReturnedSuppliesStore } from '@/stores/returnedSuppliesStore'
 import EditITSupplyModal from '../Modals/ITSupply/EditITSupplyModal'
 
-const tableHead = [
-  { key: 'item_code', label: 'Item Code' },
-  { key: 'item_name', label: 'Item Name' },
-  { key: 'manufacturer', label: 'Manufacturer' },
-  { key: 'description', label: 'Description' },
-  { key: 'item_cost', label: 'Item Cost' },
-  { key: 'stocks', label: 'Stocks' },
-  { key: 'actions', label: 'Actions' },
-]
-const deployedTabledHead = [
-    { key: 'person_in_charge', label: 'Person In Charge' },
-    { key: 'item_code', label: 'Item Code' },
-    { key: 'date_deployed', label: 'Date Deployed' },
-    { key: 'quantity', label: 'Quantity' },
-    { key: 'remarks', label: 'Remarks' },
-    { key: 'actions', label: 'Actions' },
-]
-const returnedTableHead = [
-    { key: 'person_in_charge', label: 'Person In Charge' },
-    { key: 'item_code', label: 'Item Code' },
-    { key: 'date_deployed', label: 'Date Deployed' },
-    { key: 'date_returned', label: 'Date Returned' },
-    { key: 'quantity', label: 'Quantity' },
-    { key: 'remarks', label: 'Remarks' },
-    
-]
+const tableHeaders = {
+    supplies: [
+        { key: 'item_code', label: 'Item Code' },
+        { key: 'item_name', label: 'Item Name' },
+        { key: 'manufacturer', label: 'Manufacturer' },
+        { key: 'description', label: 'Description' },
+        { key: 'item_cost', label: 'Item Cost' },
+        { key: 'stocks', label: 'Stocks' },
+        { key: 'actions', label: 'Actions' },
+    ],
+    deployed: [
+        { key: 'person_in_charge', label: 'Person In Charge' },
+        { key: 'item_code', label: 'Item Code' },
+        { key: 'date_deployed', label: 'Date Deployed' },
+        { key: 'quantity', label: 'Quantity' },
+        { key: 'remarks', label: 'Remarks' },
+        { key: 'actions', label: 'Actions' },
+    ],
+    return_history: [
+        { key: 'person_in_charge', label: 'Person In Charge' },
+        { key: 'item_code', label: 'Item Code' },
+        { key: 'date_deployed', label: 'Date Deployed' },
+        { key: 'date_returned', label: 'Date Returned' },
+        { key: 'quantity', label: 'Quantity' },
+        { key: 'remarks', label: 'Remarks' },
+    ]
+}
+
 const tabs = [
   { key: 'supplies', label: 'Supplies' },
   { key: 'deployed', label: 'Deployed' },
   { key: 'return_history', label: 'Return History' },]
 
 const Text = 'text-sm text-center items-center justify-center whitespace-nowrap px-5 py-3';
+const itemsPerPage = 10;
+
+const useFilteredPaginatedData = (data: any[], query: string, currentPage: number, keys: string[]) => {
+    const filtered = useMemo(() =>
+        data.filter(item => keys.some(key => item[key]?.toString().toLowerCase().includes(query.toLowerCase()))
+    ), [data, query, keys]);
+    const paginated = useMemo(() => 
+    filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+    [filtered, currentPage]);   
+    return {
+        data: paginated,
+        totalPages: Math.ceil(filtered.length / itemsPerPage),
+        totalFilteredCount: filtered.length
+    }
+}
+
+const highlightText = (text: string, query: string) => {
+    if (!query) return text
+    return text.split(new RegExp(`(${query})`, 'gi')).map((part, index) =>
+    part.toLowerCase() === query.toLowerCase() ? <span key={index} className="bg-yello-300">{part}</span> : part)
+};
 
 const SuppliesComponents = () => {
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState<'supplies' | 'deployed' | 'return_history'>('supplies');
     const [openCreateSupplyModal, setOpenCreateSupplyModal] = useState(false);
     const [openEditSupplyModal, setOpenEditSupplyModal] = useState(false);
     const [openDeploySupplyModal, setOpenDeploySupplyModal] = useState(false);
@@ -54,124 +77,16 @@ const SuppliesComponents = () => {
     const { fetchAllSuppliesInventoryData, fetchSpecificSupplyInventoryData, suppliesInventoryData } = useSupplyInventoryStore();
     const { fetchDeployedSuppliesData, deployedSuppliesData,specificDeployedSupply, fetchSpecificDeployedSupply } = useDeployedSuppliesStore();
     const { fetchReturnedSuppliesData, returnedSuppliesData } = useReturnedSuppliesStore();
-    useEffect(() => {
-        switch (activeTab) {
-            case 0:
-                setAllTableHead(tableHead);
-                break;
-            case 1:
-                setAllTableHead(deployedTabledHead);
-                break;
-            default:
-                setAllTableHead(returnedTableHead);
-                break;
-        }
-    }, [activeTab]);
-
-    const itemsPerPage = 10;
     
-    const supplyFilteredData = suppliesInventoryData.filter((data) => {
-        return (
-            data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.item_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.manufacturer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.item_cost?.toString().includes(searchQuery.toLowerCase()) ||
-            data.stocks?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    })
-
-    const {supplyPaginated, totalPages, totalFilteredCount} = useMemo(() => {
-            const filteredItems = supplyFilteredData.filter((data) => {
-                return (
-                    data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.item_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.manufacturer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.stocks?.toString().includes(searchQuery.toLowerCase())
-                )
-            })
-            const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
-            const supplyPaginated = filteredItems.slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-            )
-            return {supplyPaginated, totalPages, totalFilteredCount: filteredItems.length}
-    }, [ searchQuery, currentPage, itemsPerPage, supplyFilteredData])
-    
-    const deployedFilteredData = deployedSuppliesData.filter((data) => {
-        return (
-            data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.person_in_charge?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.date_deployed?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.quantity?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    })
-    const {deployedSupplies, deployedTotalPages, deployedSuppliesTotalFilter} = useMemo(() => {
-            const filteredItems = deployedFilteredData.filter((data) => {
-                return (
-                    data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.person_in_charge?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.date_deployed?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.quantity?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-                )
-            })
-            const deployedTotalPages = Math.ceil(filteredItems.length / itemsPerPage)
-            const deployedSupplies = filteredItems.slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-            )
-            return {deployedSupplies, deployedTotalPages, deployedSuppliesTotalFilter: filteredItems.length}
-    }, [ searchQuery, currentPage, itemsPerPage, deployedFilteredData])
-
-
-    const returnedFilterData = returnedSuppliesData.filter((data) => {
-        return (
-            data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.person_in_charge?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.date_deployed?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            data.quantity?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    })
-    const {returnedSupplies, returnedTotalPages, returnedSuppliesTotalFilter} = useMemo(() => {
-            const filteredItems = returnedFilterData.filter((data) => {
-                return (
-                    data.item_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.person_in_charge?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.date_deployed?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    data.quantity?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-                )
-            })
-            const returnedTotalPages = Math.ceil(filteredItems.length / itemsPerPage)
-            const returnedSupplies = filteredItems.slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-            )
-            return {returnedSupplies, returnedTotalPages, returnedSuppliesTotalFilter: filteredItems.length}
-    }, [ searchQuery, currentPage, itemsPerPage, returnedFilterData])
     useEffect(() => {
-        if(activeTab === 0 && suppliesInventoryData.length === 0) {
+        if(activeTab === 'supplies' && suppliesInventoryData.length === 0) {
             fetchAllSuppliesInventoryData();
-        } else if (activeTab === 1 && deployedSuppliesData.length === 0) {
+        } else if (activeTab === 'deployed' && deployedSuppliesData.length === 0) {
             fetchDeployedSuppliesData();
-        } else if (activeTab === 2 && returnedSuppliesData.length === 0) {
+        } else if (activeTab === 'return_history' && returnedSuppliesData.length === 0) {
             fetchReturnedSuppliesData()
         }
     }, [fetchAllSuppliesInventoryData, returnedSuppliesData, suppliesInventoryData, deployedSuppliesData, fetchDeployedSuppliesData, fetchReturnedSuppliesData, activeTab]);
-
-    
-    const highlightText = (text: string, query: string) => {
-        if (!query) return text;
-        const parts = text.split(new RegExp(`(${query})`, 'gi'));
-        return parts.map((part, index) =>
-            part.toLowerCase() === query.toLowerCase() ? (
-                <span key={index} className="bg-yellow-300">{part}</span>
-            ) : (
-                part
-            )
-        );
-    };
 
     const handleCreate = () => {
         setOpenCreateSupplyModal(true)
@@ -193,33 +108,34 @@ const SuppliesComponents = () => {
         fetchSpecificDeployedSupply(id)
         setOpenReturnSupplyModal(true);
     }
-    
-    const suppliesRenderRow = (data: SupplyInventoryProps) => {
-            return (
-                <>
-                    <td className={`${Text} truncate`}>{highlightText(data.item_code || '', searchQuery)}</td>
-                    <td className={`${Text} `}>{highlightText(data.item_name || '', searchQuery)}</td>
-                    <td className={`${Text} `}>{highlightText(data.manufacturer || '', searchQuery)}</td>
-                    <td className={`${Text} `}>{highlightText(data.description || '', searchQuery)}</td>
-                    <td className={`${Text} `}>{highlightText(data?.item_cost?.toString()!, searchQuery)}</td>
-                    <td className={`${Text} `}>{highlightText(data.stocks?.toString() || '', searchQuery)}</td>
-                    <td className={` ${Text} `}>
-                        <div className='flex flex-row gap-2 justify-center items-center'>
-                            <button onClick={() => handleDeploy(data.id!)} aria-label="Deploy Supply" className=" bg-white border-2 text-white px-2 rounded  py-1 flex-colo">
-                                <span className='text-xs font-bold text-navbar'>Deploy</span>
-                            </button>
-                            |
-                            <button onClick={() => handleEdit(data.id!)} aria-label="Deploy Supply" className=" bg-white border-2 text-white px-2 rounded  py-1 flex-colo">
-                                <span className='text-xs font-bold text-navbar'>Edit</span>
-                            </button>
-                        </div>
-                    </td>
-                </>
-            )
-    }
 
-    const deployedSuppliesRenderRow = (data: DeployedSuppliesProps) => {
-        return (
+    const filteredSupplies = useFilteredPaginatedData(suppliesInventoryData, searchQuery, currentPage, ['item_code', 'item_name', 'manufacturer', 'description', 'item_cost', 'stocks']);
+    const filteredDeployed = useFilteredPaginatedData(deployedSuppliesData, searchQuery, currentPage, ['person_in_charge', 'item_code', 'date_deployed', 'quantity', 'remarks']);
+    const filteredReturned = useFilteredPaginatedData(returnedSuppliesData, searchQuery, currentPage, ['person_in_charge', 'item_code', 'date_deployed', 'date_returned', 'quantity', 'remarks']);
+    
+    const rowRenderers = {
+        supplies: (data: SupplyInventoryProps) => (
+            <>
+                <td className={`${Text} truncate`}>{highlightText(data.item_code || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.item_name || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.manufacturer || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.description || '', searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data?.item_cost?.toString()!, searchQuery)}</td>
+                <td className={`${Text} `}>{highlightText(data.stocks?.toString() || '', searchQuery)}</td>
+                <td className={` ${Text} `}>
+                    <div className='flex flex-row gap-2 justify-center items-center'>
+                        <button onClick={() => handleDeploy(data.id!)} aria-label="Deploy Supply" className=" bg-white border-2 text-white px-2 rounded  py-1 flex-colo">
+                            <span className='text-xs font-bold text-navbar'>Deploy</span>
+                        </button>
+                        |
+                        <button onClick={() => handleEdit(data.id!)} aria-label="Deploy Supply" className=" bg-white border-2 text-white px-2 rounded  py-1 flex-colo">
+                            <span className='text-xs font-bold text-navbar'>Edit</span>
+                        </button>
+                    </div>
+                </td>
+            </>
+        ),
+        deployed: (data: DeployedSuppliesProps) => (
             <>
                 <td className={`${Text} truncate`}>{highlightText(data.person_in_charge || '', searchQuery)}</td>
                 <td className={`${Text} `}>{highlightText(data.item_code || '', searchQuery)}</td>
@@ -234,11 +150,8 @@ const SuppliesComponents = () => {
                     </div>
                 </td>
             </>
-        )
-    }
-
-    const returnedSuppliesRenderRow = (data: ReturnedSuppliesProps) => {
-        return (
+        ),
+        return_history: (data: ReturnedSuppliesProps) => (
             <>
                 <td className={`${Text} truncate`}>{highlightText(data.person_in_charge || '', searchQuery)}</td>
                 <td className={`${Text} `}>{highlightText(data.item_code || '', searchQuery)}</td>
@@ -246,10 +159,10 @@ const SuppliesComponents = () => {
                 <td className={`${Text} `}>{highlightText(data.date_returned || '', searchQuery)}</td>
                 <td className={`${Text} `}>{highlightText(data.quantity?.toString() || '', searchQuery)}</td>
                 <td className={`${Text} `}>{highlightText(data.remarks || '', searchQuery)}</td>
-                
             </>
         )
     }
+
   return (
     <>  
         <EditITSupplyModal modalOpen={openEditSupplyModal} setModalOpen={setOpenEditSupplyModal} id={specificDeployedSupply?.id} />
@@ -262,14 +175,14 @@ const SuppliesComponents = () => {
                 
                 <div className='bg-white p-5 rounded shadow-md'>
                     <div className='flex gap-1 mb-1 mt-5 text-xl'>
-                        {tabs.map((tab, index) => (
+                        {tabs.map(({key, label}) => (
                             <button 
-                                key={index} 
-                                className={`px-4 py-2 rounded ${activeTab === index ? 'bg-navbar text-white' : 'bg-gray-300 text-gray-700'}`}
+                                key={key} 
+                                className={`px-4 py-2 rounded ${activeTab === key ? 'bg-navbar text-white' : 'bg-gray-300 text-gray-700'}`}
                             
-                                onClick={() => setActiveTab(index)}
+                                onClick={() => setActiveTab(key as typeof activeTab)}
                             >
-                                {tab.label}
+                                {label}
                             </button>
                         ))}
                     </div>
@@ -279,7 +192,7 @@ const SuppliesComponents = () => {
                             <input type='text' onChange={handleSearch} placeholder='Search....'
                                     className='font-medium p-2 placeholder:text-border w-full text-sm h-16 = rounded-md mt-3 border text-black' aria-label='Search' />
                         {
-                        activeTab === 0 && 
+                        activeTab === 'supplies' && 
                             (  <button onClick={handleCreate} className='bg-gray-400 transitions hover:bg-gray-300 text-black font-bold w-36 px-4 py-2 rounded mt-3'>
                                 Add Supply
                             </button>
@@ -288,21 +201,11 @@ const SuppliesComponents = () => {
                         </div>
                         
                     <div className='mt-5'>
-                        { activeTab === 0 && 
-                        (
-                            <Table tableHead={allTableHead} rowData={supplyPaginated} rowRender={suppliesRenderRow}  />
-                        )
-                        }
-                        { activeTab === 1 && 
-                        (
-                            <Table tableHead={allTableHead} rowData={deployedSupplies} rowRender={deployedSuppliesRenderRow} />
-                        )
-                        }
-                        { activeTab === 2 && 
-                        (
-                            <Table tableHead={allTableHead} rowData={returnedSupplies} rowRender={returnedSuppliesRenderRow} />
-                        )
-                        }
+                        <Table 
+                        tableHead={tableHeaders[activeTab]}
+                        rowData={activeTab === 'supplies' ? filteredSupplies.data : activeTab === 'deployed' ? filteredDeployed.data : filteredReturned.data}
+                        rowRender={rowRenderers[activeTab]}
+                        />
                     </div>
                 </div>
             </div>

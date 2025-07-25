@@ -36,7 +36,6 @@ const TransferAssetDataModal = ({modalOpen, setModalOpen, id} : ChildrenModalPro
             setMessage('Successfully transferred this data!')
         }
     }
-    console.log(selectedAssetInventory?.company_id)
     const handleCloseModal = () => {
         setModalOpen(false)
         setFormData({})

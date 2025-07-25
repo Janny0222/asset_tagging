@@ -9,26 +9,6 @@ import Aos from 'aos';
 
 const Index = () => {
 
-const { categoryData, fetchCategoryData, selectedCategory, setSelectedCategory } = useCategoryStore();
-
-    useEffect(() => {
-        fetchCategoryData();
-    }, [fetchCategoryData])
-
-    const categoryList: Option[] = categoryData.map((category) => ({
-        value: category.id!,
-        title: category.name!
-    }))
-    const handleCategoryChange = (value: number) => {
-        const selected = categoryData.find(category => category.id === value!);
-        
-        Aos.refresh();
-        if (selected) {
-        setSelectedCategory(selected); // Set the selected category in the store
-        
-        }
-        
-    };
   return (
     <Layout>
         <Head>
@@ -37,18 +17,9 @@ const { categoryData, fetchCategoryData, selectedCategory, setSelectedCategory }
             <meta name='viewport' content='width=device-width, initial-scale=1' />
         </Head>
         <div className=' bg-white min-h-screen'>
-            <div className='p-2 w-full border-b bg-navbar/80 border-black flex justify-end '>
-                <div className='flex-btn gap-2'>
-                    <div>
-                        <label className='text-white mx-auto'>Select Category</label>
-                    </div>
-                    <div>
-                        <SelectCategory selectedValue={selectedCategory?.id || 'Please select'} options={categoryList} onChange={(e) => handleCategoryChange(+e.target.value)} />
-                    </div>
-                </div>
-            </div>
+            
             <div > 
-              {selectedCategory && <InventoryComponents/> }
+              <InventoryComponents/>
             </div>
         </div>
         

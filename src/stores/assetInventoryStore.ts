@@ -3,7 +3,8 @@ import {
     removeAssetInventory, 
     transferAssetInventory, 
     getAllAssetInventoryByCategoryAndCompanyId, 
-    getSpecificAssetInventory } from '@/services/AssetInventory/assetInventoryService';
+    getSpecificAssetInventory, 
+    getAllAssetInventoryByCompanyID} from '@/services/AssetInventory/assetInventoryService';
 
 import { create } from 'zustand'
 import { AssetInventoryProps } from '@/lib/definition'
@@ -18,6 +19,7 @@ interface AssetInventoryState {
     setSelectedAssetInventory: (assetInventoryData: AssetInventoryProps) => void;
     assetInventoryRefresh: () => Promise<void>;
     fetchAllAssetInventoryData: () => Promise<void>;
+    fetchAllAssetInventoryDataByCompanyID: (id: number) => Promise<void>;
     fetchAssetInventoryData: () => Promise<void>;
     fetchSpecificAssetInventoryData: (id: number) => void;
     transferAsset: (id: number, assetData: AssetInventoryProps) => Promise<void>;
@@ -38,6 +40,14 @@ export const useAssetInventoryStore = create<AssetInventoryState>((set) => ({
             set({ assetInventoryData: allAsset })
         } catch (error) {
             console.error('Error fetching Asset Inventories', error)
+        }
+    },
+    fetchAllAssetInventoryDataByCompanyID: async (id: number) => {
+        try {
+            const allAsset = await getAllAssetInventoryByCompanyID(id);
+            set({ assetInventoryData: allAsset })
+        } catch (error) {
+            console.error('Error fetching Asset Inventories by Company ID', error)
         }
     },
     fetchAssetInventoryData: async () => {
