@@ -136,7 +136,7 @@ const tabledHeaders = {
     }, [selectedCompany, filteredAssetInventory])
     
     // Pagination and data
-    const itemsPerPage = 5
+    const itemsPerPage = 7
     
     const handlePageChange = (pageNumber: number) => {
         if(pageNumber >= 1 && pageNumber <= totalPages) {

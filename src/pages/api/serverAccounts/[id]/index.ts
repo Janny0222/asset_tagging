@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest , res: NextApiResponse
     }   else if (req.method === "PUT") {
         const { name, department, server_user, server_password, status, remarks } = req.body;
         try {
-            if (!name || !department || !server_user || !server_password || !status) {
+            if (!name || !department || !server_user || !status) {
                 return res.status(400).json({ error: "All fields are required" });
             }
             const updatedServerAccount = await ServerAccountsModel.update({ name, department, server_user, server_password, status, remarks }, { where: { id } });

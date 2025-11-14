@@ -209,6 +209,9 @@ const NavBar = () => {
                                     <Link href="/others/server-accounts" className="hover:font-bold hover:border-b-2 border-dry  group w-full flex px-2 py-2 text-sm">
                                         Server Accounts
                                     </Link>
+                                    <Link href="/others/asset-disposal" className="hover:font-bold hover:border-b-2 border-dry  group w-full flex px-2 py-2 text-sm">
+                                        Asset Disposal
+                                    </Link>
                                     {/* <Link href="/maintenance/inventory-type" className="hover:font-bold over:font-bold hover:border-b-2 border-dry group w-full flex px-2 py-2 text-sm">
                                         Add Inventory Type
                                     </Link> */}
